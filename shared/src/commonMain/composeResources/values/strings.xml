@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_title">DataCite · каталог DOI</string>
+    <string name="action_back">Назад</string>
+    <string name="action_toggle_theme">Переключить тему</string>
+    <string name="action_toggle_language">Сменить язык</string>
+    <string name="language_badge">RU</string>
+    <string name="list_total">Записей в каталоге: %1$s</string>
+    <string name="list_empty">Каталог пуст</string>
+    <string name="search_placeholder">Поиск по названию…</string>
+    <string name="search_no_results">Ничего не найдено</string>
+    <string name="list_more_creators">+%1$s</string>
+    <string name="detail_loading">Загружаем запись…</string>
+    <string name="detail_not_found_title">Запись не найдена</string>
+    <string name="detail_not_found_body">DOI %1$s отсутствует в каталоге.</string>
+    <string name="field_publisher">Издатель</string>
+    <string name="field_year">Год</string>
+    <string name="field_version">Версия</string>
+    <string name="field_license">Лицензия</string>
+    <string name="section_description">Описание</string>
+    <string name="section_subjects">Тематики</string>
+    <string name="section_creators">Авторы</string>
+    <string name="section_related">Связанные идентификаторы</string>
+    <string name="section_metrics">Метрики</string>
+    <string name="metric_citations">Цитирования</string>
+    <string name="metric_views">Просмотры</string>
+    <string name="metric_downloads">Загрузки</string>
+    <string name="related_empty">Связей нет</string>
+    <string name="related_open">Открыть запись</string>
+</resources>

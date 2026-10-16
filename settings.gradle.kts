@@ -1,4 +1,4 @@
-rootProject.name = "KotlinProject123"
+rootProject.name = "DataCiteKMP"
 
 pluginManagement {
     repositories {
@@ -34,3 +34,4 @@ plugins {
 include(":androidApp")
 include(":desktopApp")
 include(":shared")
+include(":webApp")

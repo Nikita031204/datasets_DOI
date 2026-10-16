@@ -1,30 +1,94 @@
-This is a Kotlin Multiplatform project targeting Android, Desktop (JVM).
+# DataCite — каталог DOI
 
-* [/shared](./shared/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./shared/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./shared/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./shared/src/jvmMain/kotlin)
-    folder is the appropriate location.
+Учебное кроссплатформенное приложение для работы с научными данным. Веха В1: каркас приложения на Compose Multiplatform, без сети.
 
-### Running the apps
+## Предметная область
 
-Use the run configurations provided by the run widget in your IDE's toolbar. You can also use these commands and options:
+Каталог DOI-идентификаторов научных данных. Источник данных — DataCite API, публичное REST API для регистрации и поиска DOI научных работ.
 
-- Android app: `./gradlew :androidApp:assembleDebug`
-- Desktop app:
-  - Hot reload: `./gradlew :desktopApp:hotRun --auto`
-  - Standard run: `./gradlew :desktopApp:run`
+### Сущности домена
 
-### Running tests
+| Сущность | Что описывает | Ключевые поля |
+|----------|---------------|---------------|
+| DoiRecord | научная работа с DOI | заголовок, авторы, издатель, год публикации, тип ресурса, тематические рубрики, описание, лицензия, версия, URL, связанные идентификаторы |
+| RelatedIdentifier | связь с другой работой | значение, тип связи, вид идентификатора |
 
-Use the run button in your IDE's editor gutter, or run tests using Gradle tasks:
+### Экраны
 
-- Android tests: `./gradlew :shared:testAndroidHostTest`
-- Desktop tests: `./gradlew :shared:jvmTest`
+**Список записей** — 22 записи, поиск по названию. У карточки видны заголовок, авторы (до 2 с индикатором «+N»), издатель, год, тип ресурса.
 
----
+**Карточка записи** — полное описание: тип ресурса, заголовок, DOI, издатель, год, версия, лицензия, авторы, описание, тематические рубрики. Блок связанных идентификаторов с навигацией на другие записи. Метрики: цитирования, просмотры, загрузки.
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+В В1 сети нет: данные лежат в моках в форме ответов DataCite API. В В2 моки заменит сеть, а домен и UI останутся прежними.
+
+## Запуск
+
+Нужен JDK 21. Остальное Gradle скачает сам, первый sync долгий.
+
+### Desktop — ведущий таргет вехи
+
+```bash
+./gradlew :desktopApp:run
+```
+
+### Web (wasm), бонусом
+
+```bash
+./gradlew :webApp:wasmJsBrowserDevelopmentRun
+```
+
+### Android (нужен настроенный Android SDK)
+
+```bash
+./gradlew :androidApp:assembleDebug
+```
+
+## Проверки
+
+### Паритет ключей в локалях
+
+```bash
+python tools/check-strings.py
+```
+
+### Отчёт компилятора Compose о стабильности и пропуске рекомпозиции (после сборки лежит в shared/build/compose_compiler/)
+
+```bash
+./gradlew :shared:compileKotlinJvm
+```
+
+## Структура
+
+| Путь | Что внутри |
+|------|------------|
+| shared/src/commonMain/kotlin/.../domain | сущности и интерфейс репозитория, без деталей транспорта |
+| shared/src/commonMain/kotlin/.../data | DTO в форме ответа DataCite API, мапперы в домен, моки, реализация репозитория |
+| shared/src/commonMain/kotlin/.../list, .../detail | состояние, намерения и ViewModel экранов |
+| shared/src/commonMain/kotlin/.../ui/screens | сами экраны, рисуются из состояния |
+| shared/src/commonMain/kotlin/.../ui/navigation | маршруты, бэкстек и NavDisplay |
+| shared/src/commonMain/kotlin/.../ui/model | UI-модели и мапперы из домена |
+| shared/src/commonMain/kotlin/.../ui/theme | светлая и тёмная схемы цветов |
+| shared/src/commonMain/kotlin/.../ui/locale | переключение языка в рантайме, по реализации на платформу |
+| shared/src/commonMain/composeResources | подписи интерфейса (ru, en) |
+| tools/check-strings.py | сверка ключей локалей |
+
+## Технические решения
+
+**Навигация** — Navigation 3, мультиплатформенная сборка UI-части (org.jetbrains.androidx.navigation3:navigation3-ui). Маршрут — объект: sealed interface Screen. Бэкстек — обычный список в StateFlow внутри Navigator.
+
+**Состояние** — MVI: вниз в composable уходят состояние и колбэк намерений, ViewModel целиком не передаётся.
+
+**Тема** — токены MaterialTheme, светлая и тёмная. Зашитый цвет один: чип типа ресурса окрашен по категории.
+
+**Подписи** — composeResources, две локали (ru, en). Язык и тема переключаются в шапке и живут в памяти сессии.
+
+**Поиск** — фильтрация по подстроке в заголовке, без учёта регистра. Живёт в памяти ViewModel.
+
+**Данные каталога не переводятся**: заголовки, имена авторов, названия издателей и тематические рубрики остаются на языке оригинала (английский).
+
+## Ограничения вехи В1
+
+- Нет сети и локального хранилища: тема, язык и запрос поиска живут только в памяти сессии.
+- Нет загрузки данных по сети: записи захардкожены в моках.
+- Нет адаптива под ширину окна, deep links и адресной строки браузера — это В3.
+- iOS-таргет не заведён.

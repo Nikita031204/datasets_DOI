@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_title">DataCite · DOI catalog</string>
+    <string name="action_back">Back</string>
+    <string name="action_toggle_theme">Toggle theme</string>
+    <string name="action_toggle_language">Change language</string>
+    <string name="language_badge">EN</string>
+    <string name="list_total">Records in catalog: %1$s</string>
+    <string name="list_empty">The catalog is empty</string>
+    <string name="search_placeholder">Search by title…</string>
+    <string name="search_no_results">Nothing found</string>
+    <string name="list_more_creators">+%1$s</string>
+    <string name="detail_loading">Loading record…</string>
+    <string name="detail_not_found_title">Record not found</string>
+    <string name="detail_not_found_body">DOI %1$s is not in the catalog.</string>
+    <string name="field_publisher">Publisher</string>
+    <string name="field_year">Year</string>
+    <string name="field_version">Version</string>
+    <string name="field_license">License</string>
+    <string name="section_description">Description</string>
+    <string name="section_subjects">Subjects</string>
+    <string name="section_creators">Creators</string>
+    <string name="section_related">Related identifiers</string>
+    <string name="section_metrics">Metrics</string>
+    <string name="metric_citations">Citations</string>
+    <string name="metric_views">Views</string>
+    <string name="metric_downloads">Downloads</string>
+    <string name="related_empty">No relations</string>
+    <string name="related_open">Open record</string>
+</resources>
