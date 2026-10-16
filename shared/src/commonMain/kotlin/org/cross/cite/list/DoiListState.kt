@@ -7,4 +7,5 @@ import org.cross.cite.ui.model.DoiCardUi
 data class DoiListState(
     val items: List<DoiCardUi> = emptyList(),
     val total: Int = 0,
+    val searchQuery: String = "",
 )

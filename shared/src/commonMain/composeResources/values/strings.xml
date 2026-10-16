@@ -6,6 +6,8 @@
     <string name="language_badge">RU</string>
     <string name="list_total">Записей в каталоге: %1$s</string>
     <string name="list_empty">Каталог пуст</string>
+    <string name="search_placeholder">Поиск по названию…</string>
+    <string name="search_no_results">Ничего не найдено</string>
     <string name="list_more_creators">+%1$s</string>
     <string name="detail_loading">Загружаем запись…</string>
     <string name="detail_not_found_title">Запись не найдена</string>
